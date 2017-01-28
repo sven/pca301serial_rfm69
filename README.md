@@ -9,6 +9,10 @@ shared their work.
 With this sketch you can now use FHEM combined with an Arduino Nano and an
 RFM69 transmitter to access PCA301 remote outlets. Maybe also openHAB works.
 
+A very easy guide on how to connect the RFM69 to the Arduino Nano can be found
+at
+[Steigerbaletts Blog](https://steigerbalett.wordpress.com/2015/05/23/jeelink-clone-loten-und-mit-einer-firmware-flashen-fur-lacrosse-sensoren-in-fhem).
+
 
 ## Motivation
 
@@ -62,6 +66,7 @@ devices _or_ that PCA301 needs a wifi ESP chip instead of the Arduino Nano.
   * [FHEM](http://fhem.de)
   * [openHAB](http://www.openhab.org)
   * [LaCrosseGateway V1.x](https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x)
+  * [Steigerbaletts Blog](https://steigerbalett.wordpress.com/2015/05/23/jeelink-clone-loten-und-mit-einer-firmware-flashen-fur-lacrosse-sensoren-in-fhem)
 
 
 ## MIT License
