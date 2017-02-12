@@ -23,6 +23,7 @@
 /*****************************************************************************/
 /* Local defines */
 /*****************************************************************************/
+#define RFM69_IS_HW                 true
 #define PCA301_SERIAL_SPEED_BPS     57600
 #define PCA301_FREQ_CARRIER_KHZ     868950
 #define PCA301_BITRATE_BS           6631
@@ -115,7 +116,7 @@ static void pca301_rfm69_init(
 )
 {
     /* configure RFM69 SPI */
-    rfm69_init(PCA301_PIN_SPI_SS);
+    rfm69_init(PCA301_PIN_SPI_SS, RFM69_IS_HW);
 
     /* put transceiver in standby mode */
     rfm69_opmode_set(RFM69_OPMODE_STANDBY);
@@ -158,9 +159,6 @@ static void pca301_rfm69_init(
 
     /* set frequency deviation in Hz */
     rfm69_fdev_hz(45000);
-
-    /* set PA level */
-    rfm69_pa_level(RFM69_PA_0_ON, RFM69_PA_POUT_MAX);
 
     /* enable receiver mode */
     rfm69_opmode_set(RFM69_OPMODE_RX);

@@ -27,6 +27,7 @@ static bool rfm69_var_len = 0;                  /**< variable length flag */
 static uint8_t rfm69_opmode = 0xff;             /**< operation mode */
 static uint64_t rfm69_ts64 = 0;                 /**< 64-bit timestamp */
 static bool rfm69_flg_isr = false;              /**< ISR flag */
+static bool rfm69_flg_is_hw = false;            /**< RFM69HW flag */
 static uint8_t rfm69_dio_mapping_rx_dio = 0xff; /**< RX DIO selector */
 static uint8_t rfm69_dio_mapping_rx_val;        /**< RX DIO value */
 static uint8_t rfm69_dio_mapping_tx_dio = 0xff; /**< TX DIO selector */
@@ -63,16 +64,28 @@ void rfm69_reg_rw(
 /** RFM69 SPI Initialization
  */
 void rfm69_init(
-    uint8_t pin_spi_ss                          /**< SPI slave select pin */
+    uint8_t pin_spi_ss,                         /**< SPI slave select pin */
+    uint8_t flg_is_rfm69hw                      /**< output power flag */
 )
 {
     /* store pin for communication */
     rfm69_pin_spi_ss = pin_spi_ss;
 
+    /* store variant for output power control */
+    rfm69_flg_is_hw = flg_is_rfm69hw;
+
     /* configure SPI */
     pinMode(rfm69_pin_spi_ss, OUTPUT);
     SPI.begin();
     SPI.setBitOrder(MSBFIRST);
+
+    /* configure power amplifiers in regard to the used variant */
+    if (flg_is_rfm69hw) {
+        rfm69_pa_sel(RFM69_PA_1_ON | RFM69_PA_2_ON);
+        rfm69_ocp(false);
+    } else {
+        rfm69_pa_sel(RFM69_PA_0_ON);
+    }
 }
 
 
@@ -209,6 +222,15 @@ void rfm69_opmode_set(
         if (rfm69_ts64 >= ts64) {
             Serial.println("opmode: timeout");
             break;
+        }
+    }
+
+    /* enable high power output for RFM69HW if mode is TX */
+    if (rfm69_flg_is_hw) {
+        if (RFM69_OPMODE_TX == mode) {
+            rfm69_high_power_pa(true);
+        } else {
+            rfm69_high_power_pa(false);
         }
     }
 
@@ -589,22 +611,39 @@ void rfm69_fdev_hz(
 
 
 /*****************************************************************************/
-/** RFM69 Power Amplifier Configuration
+/** RFM69 Power Amplifier Selection
  */
-void rfm69_pa_level(
-    uint8_t pa_sel,                             /**< power amplifier mask */
-    uint8_t pout_add_db                         /**< output power add in dB */
+void rfm69_pa_sel(
+    uint8_t pa_sel                              /**< power amplifier mask */
 )
 {
     rfm69_reg_rw(RFM69_REG_PALEVEL,
                  RFM69_MSK_PALEVEL_PA_ON,
                  RFM69_SHF_PALEVEL_PA_ON,
                  pa_sel);
+}
+
+
+/*****************************************************************************/
+/** RFM69 Output Power Level in Percent
+ *
+ * RFM69W = -18 .. 13 dBm => 0 = -18 dBm, 50 = -3 dBm, 100 = 13 dBm
+ * RFM69HW = +5 .. 20 dBm => 0 = 5 dBm, 50 = 12 dBm, 100 = 20 dBM
+ */
+void rfm69_output_power(
+    uint8_t val                                 /**< output power in percent */
+)
+{
+    if (rfm69_flg_is_hw) {
+        val = (val * (20 - 5)) / 100;
+    } else {
+        val = (val * (13 - (-18))) / 100;
+    }
 
     rfm69_reg_rw(RFM69_REG_PALEVEL,
                  RFM69_MSK_PALEVEL_OUTPUTPOWER,
                  RFM69_SHF_PALEVEL_OUTPUTPOWER,
-                 pout_add_db);
+                 val);
 }
 
 
@@ -625,4 +664,33 @@ bool rfm69_rx_avail(
     }
 
     return rfm69_fifo_data_avail();
+}
+
+
+/*****************************************************************************/
+/** RFM69 Over Current Protection
+ */
+void rfm69_ocp(
+    bool on                                     /**< OCP on flag */
+)
+{
+    rfm69_reg_rw(RFM69_REG_OCP,
+                 RFM69_MSK_OCP_OCP_ON,
+                 RFM69_SHF_OCP_OCP_ON,
+                 !!on);
+}
+
+
+/*****************************************************************************/
+/** RFM69 High Power Power Amplifier
+ */
+void rfm69_high_power_pa(
+    bool on                                     /**< high power PA */
+)
+{
+    rfm69_reg_write_raw(RFM69_REG_TESTPA1,
+                        (on) ? RFM69_PA20DBM1_20DBM_MODE : RFM69_PA20DBM1_NORMAL);
+
+    rfm69_reg_write_raw(RFM69_REG_TESTPA2,
+                        (on) ? RFM69_PA20DBM2_20DBM_MODE : RFM69_PA20DBM2_NORMAL);
 }

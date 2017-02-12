@@ -87,7 +87,7 @@
 
 
 /*****************************************************************************/
-/* 0x11 RegPaLEvel */
+/* 0x11 RegPaLevel */
 /*****************************************************************************/
 #define RFM69_REG_PALEVEL                           0x11
 
@@ -101,6 +101,15 @@
 #define RFM69_PA_1_ON                               0x02
 #define RFM69_PA_2_ON                               0x01
 #define RFM69_PA_POUT_MAX                           RFM69_MSK_PALEVEL_OUTPUTPOWER
+
+
+/*****************************************************************************/
+/* 0x13 RegOcp */
+/*****************************************************************************/
+#define RFM69_REG_OCP                               0x13
+
+#define RFM69_MSK_OCP_OCP_ON                        0x01
+#define RFM69_SHF_OCP_OCP_ON                        4
 
 
 /*****************************************************************************/
@@ -221,10 +230,25 @@
 
 
 /*****************************************************************************/
+/* 0x5a RegTestPa1 */
+/* 0x5c RegTestPa2 */
+/*****************************************************************************/
+#define RFM69_REG_TESTPA1                           0x5a
+#define RFM69_REG_TESTPA2                           0x5c
+
+#define RFM69_PA20DBM1_NORMAL                       0x55
+#define RFM69_PA20DBM1_20DBM_MODE                   0x5d
+
+#define RFM69_PA20DBM2_NORMAL                       0x70
+#define RFM69_PA20DBM2_20DBM_MODE                   0x7c
+
+
+/*****************************************************************************/
 /* Prototypes */
 /*****************************************************************************/
 void rfm69_init(
-    uint8_t pin_spi_ss                          /**< SPI slave select pin */
+    uint8_t pin_spi_ss,                         /**< SPI slave select pin */
+    uint8_t flg_is_rfm69hw                      /**< output power flag */
 );
 
 uint8_t rfm69_reg_read_raw(
@@ -358,13 +382,24 @@ void rfm69_fdev_hz(
     uint16_t fdev_hz                            /**< value in Hz */
 );
 
-void rfm69_pa_level(
-    uint8_t pa_sel,                             /**< power amplifier mask */
-    uint8_t pout_add_db                         /**< output power add in dB */
+void rfm69_pa_sel(
+    uint8_t pa_sel                              /**< power amplifier mask */
+);
+
+void rfm69_output_power(
+    uint8_t val                                 /**< output power in percent */
 );
 
 bool rfm69_rx_avail(
     void
+);
+
+void rfm69_ocp(
+    bool on                                     /**< OCP on flag */
+);
+
+void rfm69_high_power_pa(
+    bool on                                     /**< high power PA */
 );
 
 
