@@ -545,7 +545,7 @@ void pca301serial_loop() {
   }
 
   if (!cmd) {
-//    pcaTask();                 // check tasks
+    pcaTask();                 // check tasks
   }
 
   if ((RFM69_OPMODE_RX == rfm69_opmode_get()) && rxfill) {
