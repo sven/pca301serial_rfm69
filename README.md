@@ -57,7 +57,8 @@ devices _or_ that PCA301 needs a wifi ESP chip instead of the Arduino Nano.
 
 ## Tested Platforms
 
-  * Arduino Nano
+  * Arduino Nano with RFM69HW - Set RFM69\_IS\_HW to true (default).
+  * [JeeLink 868 (v3c)](https://forum.fhem.de/index.php/topic,65880.0.html) - Thanks to Dirk. Set RFM69\_IS\_HW to false.
 
 
 ## Links
