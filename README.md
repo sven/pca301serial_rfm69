@@ -14,6 +14,21 @@ at
 [Steigerbaletts Blog](https://steigerbalett.wordpress.com/2015/05/23/jeelink-clone-loten-und-mit-einer-firmware-flashen-fur-lacrosse-sensoren-in-fhem).
 
 
+## Tested Platforms
+
+  * Arduino Nano with RFM69HW - Set RFM69\_IS\_HW to true (default).
+  * [JeeLink 868 (v3c)](https://forum.fhem.de/index.php/topic,65880.0.html) - Thanks to Dirk. Set RFM69\_IS\_HW to false.
+
+
+## Links
+
+  * [pca301serial](http://fhem.de/commandref.html#PCA301)
+  * [FHEM](http://fhem.de)
+  * [openHAB](http://www.openhab.org)
+  * [LaCrosseGateway V1.x](https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x)
+  * [Steigerbaletts Blog](https://steigerbalett.wordpress.com/2015/05/23/jeelink-clone-loten-und-mit-einer-firmware-flashen-fur-lacrosse-sensoren-in-fhem)
+
+
 ## Motivation
 
 I own a Brother DCP-135c printer that is now running for years and ink
@@ -53,21 +68,6 @@ devices _or_ that PCA301 needs a wifi ESP chip instead of the Arduino Nano.
 
   * Arduino Nano, eBay: 2.99 €
   * RFM69HW, 868 MHz, eBay: 2.45 €
-
-
-## Tested Platforms
-
-  * Arduino Nano with RFM69HW - Set RFM69\_IS\_HW to true (default).
-  * [JeeLink 868 (v3c)](https://forum.fhem.de/index.php/topic,65880.0.html) - Thanks to Dirk. Set RFM69\_IS\_HW to false.
-
-
-## Links
-
-  * [pca301serial](http://fhem.de/commandref.html#PCA301)
-  * [FHEM](http://fhem.de)
-  * [openHAB](http://www.openhab.org)
-  * [LaCrosseGateway V1.x](https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x)
-  * [Steigerbaletts Blog](https://steigerbalett.wordpress.com/2015/05/23/jeelink-clone-loten-und-mit-einer-firmware-flashen-fur-lacrosse-sensoren-in-fhem)
 
 
 ## MIT License
