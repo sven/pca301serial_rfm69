@@ -439,6 +439,8 @@ void rfm69_rx_bw_exp(
 
 /*****************************************************************************/
 /** RFM69 RSSI Threshold
+ *
+ * Default: 228 (0xe4) => 228 / 2 = -114 dBm
  */
 void rfm69_rssi_threshold(
     uint8_t threshold                           /**< threshold */
